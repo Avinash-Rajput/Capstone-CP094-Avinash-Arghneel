@@ -1,6 +1,6 @@
-# Problem Title: [Enter Problem Title]
+# Problem Title: CopyCheck: Text Similarity and Plagiarism Detection Engine
 
-**Problem ID:** [Enter Problem ID]
+**Problem ID:** CP094
 
 ## Team Members
 
@@ -35,9 +35,16 @@
 
 ## Features Implemented
 
-- [Describe feature 1]
-- [Describe feature 2]
-- [Describe feature 3]
+**Core Features (all 5 compulsory)**
+- Read two or more text inputs
+- Normalise the text: lowercase, remove punctuation and common words
+- Calculate word-frequency similarity between each pair
+- List sentences that appear in both texts
+- Print a similarity report with a percentage per pair
+
+**Stretch Features (optional)**
+- Compare a set of 10 submissions and rank the most similar pairs
+- Detect similarity using 3-word sequences instead of single words
 
 ## Sample Run
 
