@@ -24,7 +24,7 @@ public class AllTests {
 
         // RankerTest.run();              // CC-09
 
-        // ThreeWordSequenceTest.run();   // CC-10
+        ThreeWordSequenceTest.run();      // CC-10
 
         // ReportSaverTest.run();         // CC-11
 

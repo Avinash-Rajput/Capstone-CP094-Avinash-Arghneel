@@ -17,5 +17,5 @@ public class Settings {
     public static final String REPORT_FOLDER = "reports";
 
     // Set to true once the 3-word sequence check is ready
-    public static final boolean USE_THREE_WORD_SEQUENCES = false;
+    public static final boolean USE_THREE_WORD_SEQUENCES = true;
 }
