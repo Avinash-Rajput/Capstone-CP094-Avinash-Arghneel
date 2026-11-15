@@ -5,6 +5,7 @@ import com.copycheck.io.FileLoader;
 import com.copycheck.model.Document;
 import com.copycheck.model.PairResult;
 import com.copycheck.report.ReportPrinter;
+import com.copycheck.report.ReportSaver;
 import com.copycheck.similarity.Comparer;
 import com.copycheck.similarity.Ranker;
 import java.io.IOException;
@@ -71,6 +72,7 @@ public class Menu {
         System.out.println("6. Clear all documents");
         System.out.println("7. Run similarity report");
         System.out.println("8. Show most similar pairs (ranking)");
+        System.out.println("9. Save last report to a file");
         System.out.println("0. Exit");
     }
 
@@ -85,6 +87,7 @@ public class Menu {
             case "6" -> clearDocuments();
             case "7" -> runReport();
             case "8" -> showRanking();
+            case "9" -> saveReport();
             default -> System.out.println("Invalid choice. Please enter a number from the menu.");
         }
     }
@@ -215,6 +218,27 @@ public class Menu {
         }
         System.out.print(ReportPrinter.buildRanking(Ranker.top(lastResults, count)));
         System.out.println("Tip: option 7 shows the common sentences for every pair.");
+    }
+
+    // Option 9: writes the last report to a .txt file, a .csv file or both.
+    private void saveReport() throws IOException {
+        if (lastResults.isEmpty()) {
+            System.out.println("Please run a report first (option 7 or 8).");
+            return;
+        }
+        String choice = readLine("Save as 1) .txt  2) .csv  3) both (Enter for 3): ").trim();
+        if (choice.isEmpty()) {
+            choice = "3";
+        }
+        if (!choice.equals("1") && !choice.equals("2") && !choice.equals("3")) {
+            throw new IllegalArgumentException("Please enter 1, 2 or 3.");
+        }
+        if (choice.equals("1") || choice.equals("3")) {
+            System.out.println("Saved: " + ReportSaver.saveAsText(lastResults, Settings.REPORT_FOLDER));
+        }
+        if (choice.equals("2") || choice.equals("3")) {
+            System.out.println("Saved: " + ReportSaver.saveAsCsv(lastResults, Settings.REPORT_FOLDER));
+        }
     }
 
     // Adds a document. If the name is already used, adds " (2)", " (3)"... to keep names unique.

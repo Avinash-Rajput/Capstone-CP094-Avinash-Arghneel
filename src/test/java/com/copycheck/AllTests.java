@@ -26,7 +26,7 @@ public class AllTests {
 
         ThreeWordSequenceTest.run();      // CC-10
 
-        // ReportSaverTest.run();         // CC-11
+        ReportSaverTest.run();            // CC-11
 
         Check.printSummary();
         if (Check.getFailed() > 0) {
