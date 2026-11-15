@@ -178,8 +178,8 @@ The menu is tested by hand and with piped input, for example `printf '3\nsamples
 
 ## Team
 
-- &lt;Member A name&gt;
-- &lt;Member B name&gt;
+- Avinash Rajput
+- Arghneel Das
 
 How we worked: we split the project into GitHub issues (CC-01 to CC-12), each with its own specification. Every issue was done on its own branch and merged through a pull request that the other member reviewed. Before merging, each branch was updated with the latest `main` and `./test.sh` had to pass, so `main` always builds and passes the tests.
 
