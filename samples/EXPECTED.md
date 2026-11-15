@@ -32,14 +32,14 @@ Bands follow `AppConfig`: HIGH is a score of 70% or more, MODERATE is 40% to 69%
 
 | Pair | Relationship | Expected word-frequency band | Expected 3-word band | Common sentences expected | Actual (filled in CC-12) |
 |---|---|---|---|---|---|
-| original vs exact_copy | Identical | HIGH (100%) | HIGH (100%) | All | - |
-| original vs light_edit | Light edit | HIGH | MODERATE-HIGH | 6+ | - |
-| original vs unrelated | Unrelated | LOW | LOW | 0 | - |
-| original vs punctuation_heavy | Normalisation test | HIGH (~100%) | HIGH | Most | - |
-| submission_01 vs submission_07 | Near-copy | HIGH | HIGH | Many | - |
-| submission_03 vs submission_05 | Partial copy | MODERATE-HIGH | MODERATE | About half of 03 | - |
-| submission_02 vs submission_09 | Vocabulary paraphrase | HIGH | LOW | 0 | - |
-| Any other submission pair | Independent, same topic | LOW-MODERATE | LOW | 0 | - |
+| original vs exact_copy | Identical | HIGH (100%) | HIGH (100%) | All | Words 100.00% / 3-Word 100.00% / HIGH / 16 sentences |
+| original vs light_edit | Light edit | HIGH | MODERATE-HIGH | 6+ | Words 89.83% / 3-Word 57.65% / HIGH / 8 sentences |
+| original vs unrelated | Unrelated | LOW | LOW | 0 | Words 8.59% / 3-Word 0.00% / LOW / 0 sentences |
+| original vs punctuation_heavy | Normalisation test | HIGH (~100%) | HIGH | Most | Words 100.00% / 3-Word 100.00% / HIGH / 16 sentences |
+| submission_01 vs submission_07 | Near-copy | HIGH | HIGH | Many | Words 97.26% / 3-Word 74.87% / HIGH / 11 sentences |
+| submission_03 vs submission_05 | Partial copy | MODERATE-HIGH | MODERATE | About half of 03 | Words 77.93% / 3-Word 44.15% / HIGH / 7 sentences (of 14 in 03) |
+| submission_02 vs submission_09 | Vocabulary paraphrase | HIGH | LOW | 0 | Words 80.31% / 3-Word 0.00% / HIGH / 0 sentences |
+| Any other submission pair | Independent, same topic | LOW-MODERATE | LOW | 0 | 42 pairs: Words 5.87% to 26.40% / 3-Word 0.00% to 0.30% / all LOW / 0 sentences |
 
 ## Expected top 3 by word frequency
 
@@ -67,3 +67,25 @@ The pair submission_02 vs submission_09 should drop out of the top. The two essa
 | `edge/stopwords_only.txt` | Loads, but no content words remain; similarity with any other text is 0% and no common sentences are listed; no crash |
 | `edge/punctuation_heavy.txt` | Works normally; about 100% word-frequency similarity to `basic/original.txt` because normalisation removes the noise |
 | `edge/single_sentence.txt` | Works normally like any other document |
+
+## Results
+
+Measured in CC-12 with `./run.sh` (options 2, 3, 7 and 8) and `./test.sh` (142 tests passed). The 3-word check was switched on (`Settings.USE_THREE_WORD_SEQUENCES = true`). In this file MODERATE means 40% to 69%; the app calls the same band MEDIUM.
+
+| Expectation | Result | Explanation |
+|---|---|---|
+| original vs exact_copy | MET | 100% on both measures and all 16 sentences found. |
+| original vs light_edit | MET | Words 89.83% (HIGH), 3-Word 57.65% (MODERATE) and 8 common sentences, more than the 6 required. |
+| original vs unrelated | MET | Words 8.59% and 3-Word 0.00%, with no common sentences. |
+| original vs punctuation_heavy | MET | 100% on both measures and all 16 sentences found, so cleaning removes the caps, quotes, brackets and extra punctuation. |
+| submission_01 vs submission_07 | MET | HIGH on both measures (97.26% and 74.87%) and 11 common sentences. |
+| submission_03 vs submission_05 | MET | Words 77.93% (HIGH, inside MODERATE-HIGH), 3-Word 44.15% (MODERATE) and 7 of the 14 sentences of 03 found. |
+| submission_02 vs submission_09 | MET | Words 80.31% (HIGH) but 3-Word 0.00% and no common sentences, so the 3-word check corrects the single-word false alarm. |
+| Any other submission pair | MET | All 42 pairs are LOW (highest Words 26.40%, for 03 vs 06), 3-Word is at most 0.30% and no pair shares a sentence. |
+| Top 3 by word frequency | MET | Option 8 lists 01-07 (97.26%), 02-09 (80.31%) and 03-05 (77.93%) first. The 4th pair is far behind at 26.40%. |
+| Top 2 by 3-word sequences | MET | Sorting the 3-Word column of the report gives 01-07 (74.87%) and 03-05 (44.15%). 02-09 drops to 0.00%. Option 8 itself ranks by word score only. |
+| edge/empty.txt | MET | Option 2 prints "Error: File is empty: samples/edge/empty.txt" and the menu continues. Option 3 skips the file. |
+| edge/whitespace_only.txt | MET | Option 2 prints "Error: File is empty: samples/edge/whitespace_only.txt" and the menu continues. Option 3 skips the file. |
+| edge/stopwords_only.txt | MET | Loads (19 words), but no real words remain: 0.00% against original.txt, no common sentences, no crash. |
+| edge/punctuation_heavy.txt | MET | Loads normally and scores 100.00% against original.txt (see above). |
+| edge/single_sentence.txt | MET | Loads normally (16 words) and scores 13.35% (LOW) against original.txt. |
