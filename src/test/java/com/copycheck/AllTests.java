@@ -16,7 +16,7 @@ public class AllTests {
 
         // WordFrequencyTest.run();       // CC-05
 
-        // CommonSentencesTest.run();     // CC-06
+        CommonSentencesTest.run();        // CC-06
 
         // ComparerTest.run();            // CC-07
 
