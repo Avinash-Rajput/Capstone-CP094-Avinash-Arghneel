@@ -10,9 +10,9 @@ public class AllTests {
 
         FileLoaderTest.run();             // CC-03
 
-        // TextCleanerTest.run();         // CC-04
+        TextCleanerTest.run();            // CC-04
 
-        // SentenceSplitterTest.run();    // CC-04
+        SentenceSplitterTest.run();       // CC-04
 
         // WordFrequencyTest.run();       // CC-05
 
