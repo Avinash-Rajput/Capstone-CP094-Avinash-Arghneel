@@ -1,60 +1,47 @@
 package com.copycheck.model;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
-/**
- * The outcome of comparing two documents.
- *
- * @param first           first document of the pair
- * @param second          second document of the pair
- * @param scores          measure name to score in the range 0..1, in display order;
- *                        the first entry is the primary score
- * @param commonSentences sentences found in both documents
- */
-public record PairResult(Document first, Document second,
-                         Map<String, Double> scores,
-                         List<SentenceMatch> commonSentences) {
+// The result of comparing two documents.
+public class PairResult {
 
-    /**
-     * Validates the fields and makes defensive, order-preserving copies.
-     */
-    public PairResult {
-        Objects.requireNonNull(first, "first must not be null");
-        Objects.requireNonNull(second, "second must not be null");
-        Objects.requireNonNull(scores, "scores must not be null");
-        Objects.requireNonNull(commonSentences, "commonSentences must not be null");
-        if (scores.isEmpty()) {
-            throw new IllegalArgumentException("At least one score is required");
-        }
-        scores = Collections.unmodifiableMap(new LinkedHashMap<>(scores));
-        commonSentences = List.copyOf(commonSentences);
+    private final Document first;
+    private final Document second;
+    private final double wordScore;            // 0.0 to 1.0
+    private final double sequenceScore;        // 0.0 to 1.0 (stays 0 while the 3-word check is off)
+    private final List<String> commonSentences;
+
+    public PairResult(Document first, Document second, double wordScore,
+                      double sequenceScore, List<String> commonSentences) {
+        this.first = first;
+        this.second = second;
+        this.wordScore = wordScore;
+        this.sequenceScore = sequenceScore;
+        this.commonSentences = commonSentences;
     }
 
-    /**
-     * Returns the score of the first (primary) measure.
-     *
-     * @return primary score in the range 0..1
-     */
-    public double primaryScore() {
-        return scores.values().iterator().next();
+    public Document getFirst() {
+        return first;
     }
 
-    /**
-     * Returns the score for a given measure.
-     *
-     * @param measureName name returned by SimilarityMeasure.name()
-     * @return score in the range 0..1
-     * @throws IllegalArgumentException if this result has no such measure
-     */
-    public double score(String measureName) {
-        Double value = scores.get(measureName);
-        if (value == null) {
-            throw new IllegalArgumentException("Unknown measure: " + measureName);
-        }
-        return value;
+    public Document getSecond() {
+        return second;
+    }
+
+    public double getWordScore() {
+        return wordScore;
+    }
+
+    public double getSequenceScore() {
+        return sequenceScore;
+    }
+
+    public List<String> getCommonSentences() {
+        return commonSentences;
+    }
+
+    // Returns "HIGH - likely copied", "MEDIUM - needs review" or "LOW - looks original"
+    public String getVerdict() {
+        throw new UnsupportedOperationException("Not implemented yet - see CC-07");
     }
 }

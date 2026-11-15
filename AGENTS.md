@@ -1,53 +1,53 @@
-# CopyCheck - rules for AI coding agents
+# Rules for AI coding assistants
 
-This file is read by AI coding agents (Antigravity, Claude Code and others). Every GitHub issue repeats these rules inside its prompt, so they apply even if your agent does not read this file.
+We use AI assistants (Claude Code / Antigravity) to help write this project. These rules keep the code simple enough for us to explain every line. Each GitHub issue repeats them in its prompt.
 
-PROJECT RULES (follow every rule):
-1. Project: CopyCheck, a menu-driven Java console application that measures how similar text submissions are (capstone problem "CopyCheck: Text Similarity and Plagiarism Detection Engine").
-2. Language: Java 17. Use ONLY the Java standard library. No Maven, Gradle, external JARs, JUnit, Lombok, or text/NLP libraries (Apache Commons, OpenNLP, Lucene, etc.).
-3. Console only: no GUI (Swing/JavaFX/AWT), no web server, no database. The only allowed file output is .txt and .csv.
-4. Layout: base package com.copycheck. Production code goes in src/main/java/com/copycheck/..., tests in src/test/java/com/copycheck/... in the same package as the class under test.
-5. The public classes, records and method signatures already in the repository are the shared team contract. Do not rename, remove or change their signatures. You may add private helpers. Add new public methods or constructors only if this issue explicitly says so.
-6. Only create or modify the files listed under FILES in this task. If you believe another file must change, STOP and explain why instead of changing it.
-7. Only com.copycheck.ui.Menu (and ReportPrinter.print, which receives a PrintStream) may print to the console. Every other class returns values or throws exceptions; it never calls System.out, System.err or System.exit.
-8. Invalid input must never crash the program with a stack trace. Library classes throw IllegalArgumentException with a clear, user-friendly message; the Menu catches it and prints it.
-9. Always pass Locale.ROOT to toLowerCase/toUpperCase/String.format. Read and write files as UTF-8.
-10. Style: 4-space indentation, no tabs, no wildcard imports, descriptive names, small focused methods, Javadoc on every public class, constructor and method, constants in UPPER_SNAKE_CASE. Tunable values live in com.copycheck.AppConfig, never as magic numbers.
-11. Tests: no JUnit. Write a final class named <Something>Test with a private constructor and `public static void run()` that uses the static helpers in com.copycheck.TestSupport (check, assertEquals, assertClose, assertThrows). TestRunner discovers *Test classes automatically, so never edit TestRunner or TestSupport.
-12. Build and test with ./build.sh and ./test.sh (Windows: build.bat and test.bat). Before you finish, the build must print "Build OK" and the tests must print "ALL TESTS PASSED".
-13. Do not run any git commands (no branch, commit, push or merge). The developer reviews your changes and opens the pull request.
+PROJECT RULES (follow all of them):
+1. Project: CopyCheck, a menu-driven Java console app that checks how similar text submissions are. It is a training capstone: two students must be able to read, explain and change every line in a review. Write code the way a good student would: simple and clear, not clever.
+2. Java 17, standard library only. No Maven, Gradle, JUnit or any other external library.
+3. Console only. No GUI, web or database. The only file output allowed is .txt and .csv.
+4. Keep it simple:
+   - Plain classes with private fields, a constructor and getters. No records, no inheritance, no new interfaces, no generic classes of your own.
+   - Plain for-loops and if/else. No streams, no Optional, no var, no reflection, no method references (Foo::bar). A short lambda is allowed only for sorting.
+   - Short methods (about 25 lines or less). Clear variable names (wordCounts, not wc).
+   - Do not add classes, public methods or files that this task does not list.
+5. Comments: one short line above each class and each public method, in plain English, saying what it does or why. No Javadoc blocks, no long comments, no comments that just repeat the code.
+6. Do not change the name, parameters or return type of any existing public method. The rest of the team's code depends on them.
+7. Only the Menu class prints to the console. Other classes return values, or throw IllegalArgumentException with a clear message for the user.
+8. Wrong user input must never crash the program with a stack trace.
+9. Use Locale.ROOT in toLowerCase() and String.format(). Read and write files as UTF-8.
+10. Formatting: 4 spaces, no tabs, no wildcard imports (no import java.util.*).
+11. Tests: put test classes in src/test/java/com/copycheck/. Each has public static void run() that prints its name and uses Check.isTrue, Check.equal and Check.close. Then remove the // in front of its line in AllTests.java. Do not change Check.java.
+12. Build with ./build.sh and test with ./test.sh (Windows: build.bat, test.bat). Before you finish, the build must print "Build OK" and the tests "ALL TESTS PASSED".
+13. Only touch the files listed under FILES. If something else seems to need a change, stop and tell me instead.
+14. Do not run git commands. I review the changes and commit them myself.
 
-## Project map
+## Project structure
 
 ```
 src/main/java/com/copycheck/
-  Main.java                      entry point -> ui.Menu
-  AppConfig.java                 all tunable settings + list of similarity measures
-  model/   Document, SentenceMatch, PairResult, Verdict
-  io/      DocumentLoader        typed text, single .txt file, folder of .txt files
-  text/    StopWords, TextNormalizer, SentenceSplitter
-  similarity/ SimilarityMeasure (interface), WordFrequencySimilarity (cosine),
-              NGramSimilarity (3-word sequences, Jaccard), SentenceMatcher
-  engine/  ComparisonEngine (all pairs), Ranker (top pairs)
-  report/  ReportPrinter (console text), ReportWriter (.txt / .csv files)
-  ui/      Menu (the only class that reads input / prints)
+  Main.java              starts the program
+  Settings.java          numbers we may want to change (limits, folder names)
+  model/                 Document, PairResult
+  io/                    FileLoader            reads .txt files and folders
+  text/                  TextCleaner           lowercase, punctuation, common words
+                         SentenceSplitter      text -> sentences
+  similarity/            WordFrequency         cosine similarity of word counts
+                         CommonSentences       sentences found in both texts
+                         ThreeWordSequence     3-word sequence similarity
+                         Comparer              compares every pair
+                         Ranker                sorts pairs, most similar first
+  report/                ReportPrinter         builds the report text
+                         ReportSaver           saves .txt / .csv
+  ui/                    Menu                  the only class that talks to the user
 src/test/java/com/copycheck/
-  TestSupport, TestRunner        tiny built-in test framework (do not edit)
-  .../*Test.java                 one test class per production class
-samples/                         test data (basic, submissions, edge)
-```
-
-## Data flow
-
-```
-Document(raw text) -> TextNormalizer.tokenize -> SimilarityMeasure.compute (each measure)
-                   -> SentenceSplitter + SentenceMatcher.findCommon
-                   -> PairResult -> ReportPrinter / Ranker / ReportWriter
+  Check.java, AllTests.java, *Test.java
+samples/                 test texts
 ```
 
 ## Commands
 
-| Task | Linux / macOS / Git Bash | Windows cmd |
+| | Linux / macOS | Windows |
 |---|---|---|
 | Build | `./build.sh` | `build.bat` |
 | Test | `./test.sh` | `test.bat` |

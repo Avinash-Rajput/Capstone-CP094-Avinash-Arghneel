@@ -1,31 +1,18 @@
 package com.copycheck.ui;
 
-import java.io.PrintStream;
 import java.util.Scanner;
 
-/**
- * Menu-driven console interface.
- */
+// The console menu. This is the only class that talks to the user.
 public class Menu {
 
-    private final Scanner in;
-    private final PrintStream out;
+    private final Scanner scanner;
 
-    /**
-     * Creates the menu.
-     *
-     * @param in  input source
-     * @param out output destination
-     */
-    public Menu(Scanner in, PrintStream out) {
-        this.in = in;
-        this.out = out;
+    public Menu(Scanner scanner) {
+        this.scanner = scanner;
     }
 
-    /**
-     * Runs the menu loop until the user exits.
-     */
-    public void run() {
-        out.println("CopyCheck - menu coming in CC-08");
+    // Shows the menu until the user chooses Exit.
+    public void start() {
+        System.out.println("CopyCheck - menu coming in CC-08");
     }
 }
