@@ -8,7 +8,7 @@ public class AllTests {
 
         DocumentTest.run();
 
-        // FileLoaderTest.run();          // CC-03
+        FileLoaderTest.run();             // CC-03
 
         // TextCleanerTest.run();         // CC-04
 
