@@ -1,5 +1,6 @@
 package com.copycheck.model;
 
+import com.copycheck.Settings;
 import java.util.List;
 
 // The result of comparing two documents.
@@ -42,6 +43,12 @@ public class PairResult {
 
     // Returns "HIGH - likely copied", "MEDIUM - needs review" or "LOW - looks original"
     public String getVerdict() {
-        throw new UnsupportedOperationException("Not implemented yet - see CC-07");
+        if (wordScore >= Settings.HIGH_LIMIT) {
+            return "HIGH - likely copied";
+        } else if (wordScore >= Settings.MEDIUM_LIMIT) {
+            return "MEDIUM - needs review";
+        } else {
+            return "LOW - looks original";
+        }
     }
 }

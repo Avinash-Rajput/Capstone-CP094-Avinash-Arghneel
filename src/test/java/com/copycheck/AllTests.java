@@ -18,9 +18,9 @@ public class AllTests {
 
         CommonSentencesTest.run();        // CC-06
 
-        // ComparerTest.run();            // CC-07
+        ComparerTest.run();               // CC-07
 
-        // ReportPrinterTest.run();       // CC-07
+        ReportPrinterTest.run();          // CC-07
 
         // RankerTest.run();              // CC-09
 
